@@ -19,8 +19,7 @@ const acgeoip = () => {
       { response: 'region', geoIP: 'subdivisions[0].names.en' },
       { response: 'isp', geoIP: 'traits.isp' },
       { response: 'organization', geoIP: 'traits.organization' },
-      { response: 'domain', geoIP: 'traits.domain' },
-      { response: 'location', geoIP: 'location' },
+      { response: 'domain', geoIP: 'traits.domain' }
     ]
   }
 
