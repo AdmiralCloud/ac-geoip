@@ -1,3 +1,14 @@
+<a name="1.0.2"></a>
+## [1.0.2](https://github.com/mmpro/ac-geoip/compare/v1.0.1...v1.0.2) (2019-10-06 09:10)
+
+
+### Bug Fixes
+
+* **GeoIP:** Improved functionality | MP ([000654f](https://github.com/mmpro/ac-geoip/commit/000654f))    
+  Check for private IP, fixed using Redis as cache, allow mapping per request.
+
+
+
 <a name="1.0.1"></a>
 ## [1.0.1](https://github.com/mmpro/ac-geoip/compare/v1.0.0...v1.0.1) (2019-10-03 11:09)
 
