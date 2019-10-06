@@ -1,5 +1,6 @@
 const _ = require('lodash')
 const async = require('async')
+const ipPackage = require('ip')
 
 const WebServiceClient = require('@maxmind/geoip2-node').WebServiceClient;
 
@@ -14,7 +15,7 @@ const acgeoip = () => {
     },
     cacheTime: 7 * 86400, // cache GEOIP response for 1 week
     mapping: [
-      { response: 'iso2', geoIP: 'country.iso_code' },
+      { response: 'iso2', geoIP: 'country.isoCode' },
       { response: 'city', geoIP: 'city.names.en' },
       { response: 'region', geoIP: 'subdivisions[0].names.en' },
       { response: 'isp', geoIP: 'traits.isp' },
@@ -27,12 +28,16 @@ const acgeoip = () => {
     if (_.get(params, 'userId')) _.set(geoip, 'userId', _.get(params, 'userId'))
     if (_.get(params, 'licenseKey')) _.set(geoip, 'licenseKey', _.get(params, 'licenseKey'))
     if (_.get(params, 'env')) _.set(geoip, 'environment', _.get(params, 'env'))
+    if (_.get(params, 'redis')) _.set(geoip, 'redis', _.get(params, 'redis'))
   }
 
   const lookup = (params, cb) => {
     const ip = _.get(params, 'ip')
+    if (ipPackage.isPrivate(ip)) return cb()
+
     const refresh = _.get(params, 'refresh')
     const redisKey = _.get(geoip, 'environment') + ':geoip:' + ip
+    const mapping = _.get(params, 'mapping', geoip.mapping)
 
     let response = {
       ip
@@ -64,7 +69,11 @@ const acgeoip = () => {
         })
       },
       prepareResponse: (done) => {
-        _.forEach(geoip.mapping, item => {
+        if (_.isEmpty(mapping)) {
+          response = geoipResponse
+          return done()
+        }
+        _.forEach(mapping, item => {
           if (_.get(geoipResponse, item.geoIP)) _.set(response, item.response, _.get(geoipResponse, item.geoIP))
         })
         return done()
