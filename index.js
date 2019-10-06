@@ -10,9 +10,7 @@ const acgeoip = () => {
     userId: 'userId',
     licenseKey: 'licenseKey',
     environment: 'development',
-    redis: {
-      // instance of redis
-    },
+    // redis, // instance of redis
     cacheTime: 7 * 86400, // cache GEOIP response for 1 week
     mapping: [
       { response: 'iso2', geoIP: 'country.isoCode' },
@@ -38,6 +36,7 @@ const acgeoip = () => {
     const refresh = _.get(params, 'refresh')
     const redisKey = _.get(geoip, 'environment') + ':geoip:' + ip
     const mapping = _.get(params, 'mapping', geoip.mapping)
+    const debug = _.get(params, 'debug')
 
     let response = {
       ip
@@ -46,7 +45,7 @@ const acgeoip = () => {
     async.series({
       checkCache: (done) => {
         if (refresh) return done()
-        if (!_.isFunction(geoip.redis)) return done()
+        if (!geoip.redis) return done()
         geoip.redis.get(redisKey, (err, result) => {
           if (err) return done(err)
           try {
@@ -54,6 +53,9 @@ const acgeoip = () => {
           }
           catch (e) {
             console.error('ACGeoIP | Parsing JSON failed %j', e)
+          }
+          if (debug) {
+            console.log('AC-GEOIP | From Cache | %j', geoipResponse)
           }
           return done()
         })
@@ -64,7 +66,8 @@ const acgeoip = () => {
         client.city(ip).then(result => {
           if (!result) return done({ message: 'noResultFromGeoIP' })
           geoipResponse = result
-          if (!_.isFunction(geoip.redis)) return done()
+          console.log('AC-GEOIP | From Maxmind | %j', result)
+          if (!geoip.redis) return done()
           geoip.redis.setex(redisKey, geoip.cacheTime, JSON.stringify(result), done)
         })
       },
@@ -79,6 +82,9 @@ const acgeoip = () => {
         return done()
       }
     }, (err) => {
+      if (debug) {
+        console.log('AC-GEOIP | Response| %j', response)
+      }
       return cb(err, response)
     })   
   }
