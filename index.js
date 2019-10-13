@@ -66,7 +66,9 @@ const acgeoip = () => {
         client.city(ip).then(result => {
           if (!result) return done({ message: 'noResultFromGeoIP' })
           geoipResponse = result
-          console.log('AC-GEOIP | From Maxmind | %j', result)
+          if (debug) {
+            console.log('AC-GEOIP | From Maxmind | %j', result)
+          }
           if (!geoip.redis) return done()
           geoip.redis.setex(redisKey, geoip.cacheTime, JSON.stringify(result), done)
         })
