@@ -1,3 +1,14 @@
+<a name="1.0.4"></a>
+## [1.0.4](https://github.com/mmpro/ac-geoip/compare/v1.0.3...v1.0.4) (2019-10-13 06:40)
+
+
+### Bug Fixes
+
+* **GeoIP:** Only log if debug parameter is set | MP ([b5466de](https://github.com/mmpro/ac-geoip/commit/b5466de))    
+  Only log if debug parameter is set
+
+
+
 <a name="1.0.3"></a>
 ## [1.0.3](https://github.com/mmpro/ac-geoip/compare/v1.0.2...v1.0.3) (2019-10-06 09:57)
 
