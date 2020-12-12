@@ -16,11 +16,6 @@
     "ioredis": "^4.19.2",
     "mocha": "^8.2.1"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "make lint-check"
-    }
-  },
   "scripts": {
     "test": "./node_modules/.bin/mocha --bail --exit --slow 1000 ./test/test.js || :"
   },
