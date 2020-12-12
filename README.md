@@ -15,10 +15,17 @@ let geoip = {
 
 acgeoip.init(geoip)
 
+// ASYNC/AWAIT
+async() {
+  let response = await acgeoip.lookup({ ip: '1.2.3.4' })
+}
+
+
+// TRADITONELL CALLBACK
 acgeoip.lookup({
   ip: '8.8.8.8'
-}, (err, result) => {
-  console.log(result)
+}, (err, response) => {
+  console.log(response)
 })
 
 ```

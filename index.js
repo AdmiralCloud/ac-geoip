@@ -1,5 +1,4 @@
 const _ = require('lodash')
-const async = require('async')
 const ipPackage = require('ip')
 
 const WebServiceClient = require('@maxmind/geoip2-node').WebServiceClient;
@@ -18,7 +17,7 @@ const acgeoip = () => {
       { response: 'region', geoIP: 'subdivisions[0].names.en' },
       { response: 'isp', geoIP: 'traits.isp' },
       { response: 'organization', geoIP: 'traits.organization' },
-      { response: 'domain', geoIP: 'traits.domain' }
+      { response: 'domain', geoIP: 'traits.domain' },
     ]
   }
 
@@ -29,7 +28,7 @@ const acgeoip = () => {
     if (_.get(params, 'redis')) _.set(geoip, 'redis', _.get(params, 'redis'))
   }
 
-  const lookup = (params, cb) => {
+  const lookup = async(params, cb) => {
     const ip = _.get(params, 'ip')
     if (ipPackage.isPrivate(ip)) return cb()
 
@@ -42,53 +41,58 @@ const acgeoip = () => {
       ip
     }
     let geoipResponse
-    async.series({
-      checkCache: (done) => {
-        if (refresh) return done()
-        if (!geoip.redis) return done()
-        geoip.redis.get(redisKey, (err, result) => {
-          if (err) return done(err)
-          try {
-            geoipResponse = JSON.parse(result)
-          }
-          catch (e) {
-            console.error('ACGeoIP | Parsing JSON failed %j', e)
-          }
-          if (debug) {
-            console.log('AC-GEOIP | From Cache | %j', geoipResponse)
-          }
-          return done()
-        })
-      },
-      getFresh: (done) => {
-        if (!_.isEmpty(geoipResponse)) return done() // using cached value
-        const client = new WebServiceClient(geoip.userId, geoip.licenseKey)
-        client.city(ip).then(result => {
-          if (!result) return done({ message: 'noResultFromGeoIP' })
-          geoipResponse = result
-          if (debug) {
-            console.log('AC-GEOIP | From Maxmind | %j', result)
-          }
-          if (!geoip.redis) return done()
-          geoip.redis.setex(redisKey, geoip.cacheTime, JSON.stringify(result), done)
-        })
-      },
-      prepareResponse: (done) => {
-        if (_.isEmpty(mapping)) {
-          response = geoipResponse
-          return done()
+
+    // try redis
+    if (geoip.redis && !refresh) {
+      try {
+        geoipResponse = await geoip.redis.get(redisKey)
+        geoipResponse = JSON.parse(geoipResponse)
+        if (_.isPlainObject(geoipResponse)) {
+          geoipResponse.fromCache = true
         }
-        _.forEach(mapping, item => {
-          if (_.get(geoipResponse, item.geoIP)) _.set(response, item.response, _.get(geoipResponse, item.geoIP))
+        if (debug) {
+          console.log('AC-GEOIP | From Cache | %j', geoipResponse)
+        }
+      }
+      catch(e) {
+        console.error('AC-GEOIP | From Cache | Failed | %j', e)
+      }
+    }
+
+    // fetch fresh
+    if (refresh || !_.get(geoipResponse, 'country')) {
+      try {
+        const client = new WebServiceClient(geoip.userId, geoip.licenseKey)
+        geoipResponse = await new Promise((resolve, reject) => {
+            client.city(ip).then(result => {
+              return resolve(result)
+          }).catch(reject)
         })
-        return done()
+        if (debug) {
+          console.log('AC-GEOIP | From Maxmind | %j', geoipResponse)
+        }
+        if (geoip.redis) {
+          await geoip.redis.setex(redisKey, geoip.cacheTime, JSON.stringify(geoipResponse))
+        }      
       }
-    }, (err) => {
-      if (debug) {
-        console.log('AC-GEOIP | Response| %j', response)
+      catch(e) {
+        console.error('AC-GEOIP | From Maxmind | Failed | %j', e)
       }
-      return cb(err, response)
-    })   
+    }
+
+    // prepare response
+    if (!_.isEmpty(mapping)) {
+      _.forEach(mapping, item => {
+        if (_.get(geoipResponse, item.geoIP)) _.set(response, item.response, _.get(geoipResponse, item.geoIP))
+      })
+    }
+    else {
+      response = geoipResponse
+    }
+    if (_.get(geoipResponse, 'fromCache')) _.set(response, 'fromCache', true)
+
+    if (_.isFunction(cb)) return cb(null, response)
+    return response
   }
 
 
