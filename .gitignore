@@ -5,7 +5,7 @@
 node_modules
 npm-debug.log
 **/logs/**
-
+yarn-error.log
 
 ########################
 # misc / editors
@@ -14,7 +14,7 @@ npm-debug.log
 *#
 **/.DS_STORE/**
 **/tmp/**
-test.js
+debug.js
 
 ########################
 # docs / tests
@@ -26,3 +26,4 @@ report.xml
 # local config
 ########################
 .jenkins.conf
+credentials.js
