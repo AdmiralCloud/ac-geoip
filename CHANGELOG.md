@@ -1,3 +1,20 @@
+<a name="1.1.0"></a>
+ 
+# [1.1.0](https://github.com/mmpro/ac-geoip/compare/v1.0.4..v1.1.0) (2020-12-12 14:43:41)
+
+
+### Feature
+
+* **App:** Function now supports async/await | MP | [f6b65c568ed34fb8149ee9e00d23b8946cb83256](https://github.com/mmpro/ac-geoip/commit/f6b65c568ed34fb8149ee9e00d23b8946cb83256)    
+You can use async/await in addition to classic callback
+### Chores
+
+* **App:** Remove husky | MP | [cb52b5d3f8c38c6e8a9437725b5aeba35cf6de33](https://github.com/mmpro/ac-geoip/commit/cb52b5d3f8c38c6e8a9437725b5aeba35cf6de33)    
+Remove husky
+* **App:** Package cleanup and updates | MP | [f661f118bd7897bce87de6c862d8497a19ec72f8](https://github.com/mmpro/ac-geoip/commit/f661f118bd7897bce87de6c862d8497a19ec72f8)    
+Package cleanup and updates
+* **App:** Use ac-semantic-release | MP | [66c9797b3db0072559d62f16dcaa93acdad6859a](https://github.com/mmpro/ac-geoip/commit/66c9797b3db0072559d62f16dcaa93acdad6859a)    
+Use ac-semantic-release
 <a name="1.0.4"></a>
 ## [1.0.4](https://github.com/mmpro/ac-geoip/compare/v1.0.3...v1.0.4) (2019-10-13 06:40)
 
