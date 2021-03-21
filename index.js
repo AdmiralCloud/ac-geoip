@@ -2,6 +2,7 @@ const _ = require('lodash')
 const ipPackage = require('ip')
 
 const WebServiceClient = require('@maxmind/geoip2-node').WebServiceClient;
+const Reader = require('@maxmind/geoip2-node').Reader;
 
 const acgeoip = () => {
   
@@ -10,6 +11,10 @@ const acgeoip = () => {
     licenseKey: 'licenseKey',
     environment: 'development',
     // redis, // instance of redis
+    geolite: {
+      enabled: false,
+      path: '/path/to/GeoLite2-City.mmdb'
+    },
     cacheTime: 7 * 86400, // cache GEOIP response for 1 week
     mapping: [
       { response: 'iso2', geoIP: 'country.isoCode' },
@@ -26,6 +31,7 @@ const acgeoip = () => {
     if (_.get(params, 'licenseKey')) _.set(geoip, 'licenseKey', _.get(params, 'licenseKey'))
     if (_.get(params, 'env')) _.set(geoip, 'environment', _.get(params, 'env'))
     if (_.get(params, 'redis')) _.set(geoip, 'redis', _.get(params, 'redis'))
+    if (_.get(params, 'geolite')) _.set(geoip, 'geolite', _.get(params, 'geolite'))
   }
 
   const lookup = async(params, cb) => {
@@ -62,12 +68,23 @@ const acgeoip = () => {
     // fetch fresh
     if (refresh || !_.get(geoipResponse, 'country')) {
       try {
-        const client = new WebServiceClient(geoip.userId, geoip.licenseKey)
-        geoipResponse = await new Promise((resolve, reject) => {
-            client.city(ip).then(result => {
-              return resolve(result)
-          }).catch(reject)
-        })
+        if (_.get(geoip, 'geolite.enabled')) {
+          geoipResponse = await new Promise((resolve, reject) => {
+              Reader.open(_.get(geoip, 'geolite.path')).then(reader => {
+              const response = reader.city(ip)
+              resolve(response)
+            }).catch(reject)
+          })
+        }
+        else {
+          const client = new WebServiceClient(geoip.userId, geoip.licenseKey)
+          geoipResponse = await new Promise((resolve, reject) => {
+              client.city(ip).then(result => {
+                return resolve(result)
+            }).catch(reject)
+          })
+        }
+
         if (debug) {
           console.log('AC-GEOIP | From Maxmind | %j', geoipResponse)
         }
