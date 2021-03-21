@@ -1,3 +1,20 @@
+<a name="1.2.0"></a>
+ 
+# [1.2.0](https://github.com/mmpro/ac-geoip/compare/v1.1.0..v1.2.0) (2021-03-21 07:35:20)
+
+
+### Feature
+
+* **App:** You can now use geolite2 local database | MP | [dd671ab0b6bcc19cee5aefeb3cf421c15974e864](https://github.com/mmpro/ac-geoip/commit/dd671ab0b6bcc19cee5aefeb3cf421c15974e864)    
+It is now possible to use geolite2 downloadble database instead of web service.
+### Chores
+
+* **App:** Do not commit folder geolite2 | MP | [8e20cbba069222d9f25abe79111d604bc827b3e6](https://github.com/mmpro/ac-geoip/commit/8e20cbba069222d9f25abe79111d604bc827b3e6)    
+Do not commit folder geolite2
+### Chores
+
+* **App:** Updated packages | MP | [8c44382bb0f0c60973fccd6f7e25feb01993e32b](https://github.com/mmpro/ac-geoip/commit/8c44382bb0f0c60973fccd6f7e25feb01993e32b)    
+Updated packages
 <a name="1.1.0"></a>
  
 # [1.1.0](https://github.com/mmpro/ac-geoip/compare/v1.0.4..v1.1.0) (2020-12-12 14:43:41)
