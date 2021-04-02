@@ -1,3 +1,20 @@
+<a name="1.2.1"></a>
+
+## [1.2.1](https://github.com/mmpro/ac-geoip/compare/v1.2.0..v1.2.1) (2021-04-02 06:49:54)
+
+
+### Bug Fix
+
+* **App:** Improved logging | MP | [7d664460d4109fc078e656a0fe264a23c7e2cf9d](https://github.com/mmpro/ac-geoip/commit/7d664460d4109fc078e656a0fe264a23c7e2cf9d)    
+Improved logging
+### Tests
+
+* **App:** Added tests for geolite database | MP | [f6da987068a63c4cb43fb84729e4816875de9283](https://github.com/mmpro/ac-geoip/commit/f6da987068a63c4cb43fb84729e4816875de9283)    
+Added tests for geolite database
+### Chores
+
+* **App:** Updated packages | MP | [66e8056c2dab7377b6040cb35551ee3bf352e98d](https://github.com/mmpro/ac-geoip/commit/66e8056c2dab7377b6040cb35551ee3bf352e98d)    
+Updated packages
 <a name="1.2.0"></a>
  
 # [1.2.0](https://github.com/mmpro/ac-geoip/compare/v1.1.0..v1.2.0) (2021-03-21 07:35:20)
