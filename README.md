@@ -1,11 +1,13 @@
 # AC GEOIP
-Lookup IP addresses at Maxmind GEOIP services and prepare the response with custom field mapping. Optionally, you can store the response in Redis to improve performance (of your app).
+Lookup IP addresses at Maxmind GEOIP services or local Maxmind (Geolite) database and prepare the response with custom field mapping. Optionally, you can store the response in Redis to improve performance (of your app).
 
 GEOIP web service requires an account at Maxmind.
 
 You can also use the Geolite2 database from Maxmind: https://dev.maxmind.com/geoip/geoip2/geolite2/
 
 ## Usage
+
+### Using Webservice
 ```
 const acgeoip = require('./index')
 
@@ -13,24 +15,61 @@ let geoip = {
   userId: 123456778,
   licenseKey: 'abc-licensekey'
 }
-
-// OR if you want to use Geolite2 local database
-let geoip = {
-  geolite: {
-    enabled: true,
-    path: '/path/to/GeoLite2-City.mmdb'
-  }
-}
-
 acgeoip.init(geoip)
 
 // ASYNC/AWAIT
 async() {
   let response = await acgeoip.lookup({ ip: '1.2.3.4' })
 }
+```
 
+### Using local (Geolite) database
+```
+const acgeoip = require('./index')
 
-// TRADITONELL CALLBACK
+let geoip = {
+  geolite: {
+    enabled: true,
+    path: '/path/to/GeoLite2-City.mmdb'
+  }
+}
+acgeoip.init(geoip)
+
+// ASYNC/AWAIT
+async() {
+  let response = await acgeoip.lookupLocal({ ip: '1.2.3.4' })
+}
+```
+
+### Combined usage
+```
+const acgeoip = require('./index')
+
+let geoip = {
+  userId: 123456778,
+  licenseKey: 'abc-licensekey',
+  geolite: {
+    enabled: true,
+    path: '/path/to/GeoLite2-City.mmdb'
+  }
+}
+acgeoip.init(geoip)
+
+// lookup using web service
+async() {
+  let response = await acgeoip.lookup({ ip: '1.2.3.4' })
+}
+
+// lookup using local database
+async() {
+  let response = await acgeoip.lookupLocal({ ip: '1.2.3.4' })
+}
+```
+
+### Using callbacks
+We recommend using modern async/await approach, but you can also use classic callbacks.
+```
+// TRADITONAL CALLBACK is available for lookup and lookupLocal 
 acgeoip.lookup({
   ip: '8.8.8.8'
 }, (err, response) => {
@@ -41,7 +80,7 @@ acgeoip.lookup({
 
 ## Init Parameters
 **Required**   
-Initiate the function with the required "userId" and "licenseKey" if you want to use the webservice.
+Initiate the function with the required "userId" and "licenseKey" if you want to use the webservice. If you want to use local database, make sure to set geolite.enabled to true and provide the location of the database.
 
 **Mapping**   
 Define how your response looks like using a mapping array. The array contains objects with properties "response" which is the property name in the response and "geoIP" which is the path to the GeoIP response. 

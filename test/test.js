@@ -1,14 +1,14 @@
 const acgeoip = require('../index')
 const _ = require('lodash')
 
-require('chai/register-expect')
+const { expect } = require('chai');
+
 
 
 const Redis = require("ioredis");
 const redis = new Redis() 
 
 const credentials = require('./../credentials');
-const { expect } = require('chai');
 
 
 const ip = '35.184.130.59'
@@ -22,7 +22,19 @@ const expectedValue = {
   domain: 'googleusercontent.com'
 }
 
+
 describe('Test Webservice', () => {
+
+  it('Webservice is not yet enabled - should fail', async function() {
+    this.timeout(5000)
+    try {
+      await acgeoip.lookup({ ip, debug: false })    
+    }
+ catch (e) {
+      expect(e).to.be.instanceOf(Error)
+      expect(e.message).to.eql('acgeoip_licenseKey_missing')
+    }
+  })
 
   it('Init', done => {
     const geoip = {
@@ -75,6 +87,18 @@ describe('Test Webservice', () => {
 
 
 describe('Test Geolite2 local database', () => {
+
+  it('Geolite local is not yet enabled - should fail', async function() {
+    this.timeout(5000)
+    try {
+      await acgeoip.lookupLocal({ ip, debug: false })    
+    }
+ catch (e) {
+      expect(e).to.be.instanceOf(Error)
+      expect(e.message).to.eql('acgeoip_geolite_notEnabled')
+    }
+  })
+
   it('Init geolite', done => {
     const geoip = {
       redis: undefined,
@@ -89,10 +113,15 @@ describe('Test Geolite2 local database', () => {
     return done()
   })
 
-  
+  it('Test local ip async/await', async function() {
+    this.timeout(5000)
+    const result = await acgeoip.lookupLocal({ ip: '127.0.0.1', debug: false })    
+    expect(result).to.be.undefined
+  })
+
   it('Shoud be tested with async/await', async function() {
       this.timeout(5000)
-      const result = await acgeoip.lookup({ ip, debug: false })    
+      const result = await acgeoip.lookupLocal({ ip, debug: false })    
       let fields = ['iso2', 'city', 'region']
       _.forEach(fields, key => {
         let val = _.get(expectedValue, key)

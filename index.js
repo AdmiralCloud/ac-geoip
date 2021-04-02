@@ -34,9 +34,71 @@ const acgeoip = () => {
     if (_.has(params, 'geolite')) _.set(geoip, 'geolite', _.get(params, 'geolite'))
   }
 
-  const lookup = async(params, cb) => {
+
+
+  const lookupLocal = async(params, cb) => {
+    if (!_.get(geoip, 'geolite.enabled')) {
+      let message = 'acgeoip_geolite_notEnabled'
+      if (_.isFunction(cb)) return cb({ message })
+      throw Error(message)
+    }
     const ip = _.get(params, 'ip')
-    if (ipPackage.isPrivate(ip)) return cb()
+    if (ipPackage.isPrivate(ip)) {
+      if (_.isFunction(cb)) return cb()
+      return
+    }
+
+    const mapping = _.get(params, 'mapping', geoip.mapping)
+    const debug = _.get(params, 'debug')
+
+    let response = {
+      ip
+    }
+    let geoipResponse
+
+    try {
+      if (_.get(geoip, 'geolite.enabled')) {
+        geoipResponse = await new Promise((resolve, reject) => {
+            Reader.open(_.get(geoip, 'geolite.path')).then(reader => {
+            const response = reader.city(ip)
+            resolve(response)
+          }).catch(reject)
+        })
+      }
+
+      if (debug) {
+        console.log('AC-GEOIP | From Geolite | %s', JSON.stringify(geoipResponse, null, 2))
+      }
+    }
+    catch(e) {
+      console.error('AC-GEOIP | From Geolite | Failed | %j', e)
+    }
+
+    // prepare response
+    if (!_.isEmpty(mapping)) {
+      _.forEach(mapping, item => {
+        if (_.get(geoipResponse, item.geoIP)) _.set(response, item.response, _.get(geoipResponse, item.geoIP))
+      })
+    }
+    else {
+      response = geoipResponse
+    }
+    if (_.isFunction(cb)) return cb(null, response)
+    return response
+  }
+
+
+  const lookup = async(params, cb) => {
+    if (!_.get(geoip, 'licenseKey') || _.get(geoip, 'licenseKey') === 'licenseKey') {
+      let message = 'acgeoip_licenseKey_missing'
+      if (_.isFunction(cb)) return cb({ message })
+      throw Error(message)
+    }
+    const ip = _.get(params, 'ip')
+    if (ipPackage.isPrivate(ip)) {
+      if (_.isFunction(cb)) return cb()
+      return
+    }
 
     const refresh = _.get(params, 'refresh')
     const redisKey = _.get(geoip, 'environment') + ':geoip:' + ip
@@ -68,22 +130,12 @@ const acgeoip = () => {
     // fetch fresh
     if (refresh || !_.get(geoipResponse, 'country')) {
       try {
-        if (_.get(geoip, 'geolite.enabled')) {
-          geoipResponse = await new Promise((resolve, reject) => {
-              Reader.open(_.get(geoip, 'geolite.path')).then(reader => {
-              const response = reader.city(ip)
-              resolve(response)
-            }).catch(reject)
-          })
-        }
-        else {
-          const client = new WebServiceClient(geoip.userId, geoip.licenseKey)
-          geoipResponse = await new Promise((resolve, reject) => {
-              client.city(ip).then(result => {
-                return resolve(result)
-            }).catch(reject)
-          })
-        }
+        const client = new WebServiceClient(geoip.userId, geoip.licenseKey)
+        geoipResponse = await new Promise((resolve, reject) => {
+            client.city(ip).then(result => {
+              return resolve(result)
+          }).catch(reject)
+        })
 
         if (debug) {
           console.log('AC-GEOIP | From Maxmind | %s', JSON.stringify(geoipResponse, null, 2))
@@ -115,7 +167,8 @@ const acgeoip = () => {
 
   return {
     init,
-    lookup
+    lookup,
+    lookupLocal
   }
 }
 
