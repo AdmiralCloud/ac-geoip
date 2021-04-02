@@ -27,11 +27,11 @@ const acgeoip = () => {
   }
 
   const init = (params) => {
-    if (_.get(params, 'userId')) _.set(geoip, 'userId', _.get(params, 'userId'))
-    if (_.get(params, 'licenseKey')) _.set(geoip, 'licenseKey', _.get(params, 'licenseKey'))
-    if (_.get(params, 'env')) _.set(geoip, 'environment', _.get(params, 'env'))
-    if (_.get(params, 'redis')) _.set(geoip, 'redis', _.get(params, 'redis'))
-    if (_.get(params, 'geolite')) _.set(geoip, 'geolite', _.get(params, 'geolite'))
+    if (_.has(params, 'userId')) _.set(geoip, 'userId', _.get(params, 'userId'))
+    if (_.has(params, 'licenseKey')) _.set(geoip, 'licenseKey', _.get(params, 'licenseKey'))
+    if (_.has(params, 'env')) _.set(geoip, 'environment', _.get(params, 'env'))
+    if (_.has(params, 'redis')) _.set(geoip, 'redis', _.get(params, 'redis'))
+    if (_.has(params, 'geolite')) _.set(geoip, 'geolite', _.get(params, 'geolite'))
   }
 
   const lookup = async(params, cb) => {
@@ -57,7 +57,7 @@ const acgeoip = () => {
           geoipResponse.fromCache = true
         }
         if (debug) {
-          console.log('AC-GEOIP | From Cache | %j', geoipResponse)
+          console.log('AC-GEOIP | From Cache | %j', JSON.stringify(geoipResponse, null, 2))
         }
       }
       catch(e) {
@@ -86,7 +86,7 @@ const acgeoip = () => {
         }
 
         if (debug) {
-          console.log('AC-GEOIP | From Maxmind | %j', geoipResponse)
+          console.log('AC-GEOIP | From Maxmind | %s', JSON.stringify(geoipResponse, null, 2))
         }
         if (geoip.redis) {
           await geoip.redis.setex(redisKey, geoip.cacheTime, JSON.stringify(geoipResponse))
