@@ -1,3 +1,12 @@
+<a name="1.3.0"></a>
+ 
+# [1.3.0](https://github.com/mmpro/ac-geoip/compare/v1.2.1..v1.3.0) (2021-04-02 09:52:27)
+
+
+### Feature
+
+* **App:** LookupLocal for local database lookup | MP | [d6821229d6475e6bd2bb83822bee01bf474f1219](https://github.com/mmpro/ac-geoip/commit/d6821229d6475e6bd2bb83822bee01bf474f1219)    
+LookupLocal is now available as dedicated function to lookup a local geolite database. Lookup only uses webservice. You can use both functions in parallel (e.g. to compare results).
 <a name="1.2.1"></a>
 
 ## [1.2.1](https://github.com/mmpro/ac-geoip/compare/v1.2.0..v1.2.1) (2021-04-02 06:49:54)
