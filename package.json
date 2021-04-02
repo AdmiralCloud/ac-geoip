@@ -11,8 +11,8 @@
   },
   "devDependencies": {
     "ac-semantic-release": "^0.2.5",
+    "chai": "^4.3.4",
     "eslint": "^7.22.0",
-    "expect": "^26.x",
     "ioredis": "^4.24.2",
     "mocha": "^8.3.2"
   },
