@@ -1,3 +1,16 @@
+<a name="1.4.0"></a>
+ 
+# [1.4.0](https://github.com/mmpro/ac-geoip/compare/v1.3.0..v1.4.0) (2021-04-12 09:36:41)
+
+
+### Feature
+
+* **App:** Use node-cache per default | MP | [1a5481a30245fc53ccb6333a60f4ae38a8245eb5](https://github.com/mmpro/ac-geoip/commit/1a5481a30245fc53ccb6333a60f4ae38a8245eb5)    
+If Redis is not defined, use node-cache (memory) to improve performance.
+### Bug Fix
+
+* **App:** Allow Redis usage when using local database | MP | [943ab0cf914245cceab0c23da1e03078783a1b66](https://github.com/mmpro/ac-geoip/commit/943ab0cf914245cceab0c23da1e03078783a1b66)    
+To improve performance it makes sense to use Redis even for local database. Lookup is a little slow and consumes a lot of CPU
 <a name="1.3.0"></a>
  
 # [1.3.0](https://github.com/mmpro/ac-geoip/compare/v1.2.1..v1.3.0) (2021-04-02 09:52:27)
