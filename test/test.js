@@ -23,6 +23,7 @@ const expectedValue = {
 }
 
 
+
 describe('Test Webservice', () => {
 
   it('Webservice is not yet enabled - should fail', async function() {
@@ -46,24 +47,9 @@ describe('Test Webservice', () => {
     return done()
   })
 
-  it('Shoud be tested with callback', function(done) {
-    this.timeout(5000)
-    acgeoip.lookup({
-      ip,
-      debug: false
-    }, (err, result) => {
-      if (err) return done(err)
-      //console.log(51, result)
-      _.forOwn(expectedValue, (val, key) => {
-        expect(result).to.have.property(key, val)
-      })
-      return done()
-    })
-  })
-
   it('Shoud be tested with async/await', async function() {
     this.timeout(5000)
-    const result = await acgeoip.lookup({ ip, debug: false })     
+    const result = await acgeoip.lookup({ ip, debug: false, refresh: true })     
     _.forOwn(expectedValue, (val, key) => {
       expect(result).to.have.property(key, val)
     })
@@ -101,7 +87,7 @@ describe('Test Geolite2 local database', () => {
 
   it('Init geolite', done => {
     const geoip = {
-      redis: undefined,
+      redis,
       userId: undefined,
       licenseKey: undefined,
       geolite: {
@@ -121,13 +107,27 @@ describe('Test Geolite2 local database', () => {
 
   it('Shoud be tested with async/await', async function() {
       this.timeout(5000)
-      const result = await acgeoip.lookupLocal({ ip, debug: false })    
+      const result = await acgeoip.lookupLocal({ ip, debug: false, refresh: true })    
       let fields = ['iso2', 'city', 'region']
       _.forEach(fields, key => {
         let val = _.get(expectedValue, key)
         expect(result).to.have.property(key, val)
       })
+      expect(result).to.have.property('origin', 'db')
       return 
+  })
+
+  it('Test again - should be from cache', async function() {
+    this.timeout(5000)
+    const result = await acgeoip.lookupLocal({ ip, debug: false })    
+    let fields = ['iso2', 'city', 'region']
+    _.forEach(fields, key => {
+      let val = _.get(expectedValue, key)
+      expect(result).to.have.property(key, val)
+    })
+    expect(result).to.have.property('origin', 'db')
+    expect(result).to.have.property('fromCache', true)
+    return 
   })
 })
 
