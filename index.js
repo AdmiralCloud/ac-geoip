@@ -98,7 +98,7 @@ const acgeoip = () => {
           if (debugPerformance) console.log('%s | readFromDB %d', functionName, performanceHelper(start, process.hrtime()))
 
           if (debug) {
-            console.log('AC-GEOIP | From Geolite | %s', JSON.stringify(geoipResponse, null, 2))
+            console.log('AC-GEOIP | From Geolite | %j', geoipResponse)
           }
         }
         catch(e) {
@@ -180,7 +180,7 @@ const acgeoip = () => {
         }
 
         if (debug) {
-          console.log('AC-GEOIP | From Maxmind | %s', JSON.stringify(geoipResponse, null, 2))
+          console.log('AC-GEOIP | From Maxmind | %j', geoipResponse)
         }
       }
       catch(e) {
@@ -247,7 +247,7 @@ const acgeoip = () => {
         geoipResponse.fromCache = true
       }
       if (debug) {
-        console.log('AC-GEOIP | From Cache | %j', JSON.stringify(geoipResponse, null, 2))
+        console.log('AC-GEOIP | From Cache | %j', geoipResponse)
       }
     }
     catch(e) {
