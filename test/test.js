@@ -31,7 +31,7 @@ describe('Test Webservice', () => {
     try {
       await acgeoip.lookup({ ip, debug: false })    
     }
- catch (e) {
+    catch (e) {
       expect(e).to.be.instanceOf(Error)
       expect(e.message).to.eql('acgeoip_licenseKey_missing')
     }
