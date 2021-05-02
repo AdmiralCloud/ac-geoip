@@ -5,7 +5,7 @@
   "repository": "mmpro/ac-geoip",
   "version": "1.4.0",
   "dependencies": {
-    "@maxmind/geoip2-node": "^2.3.1",
+    "@maxmind/geoip2-node": "^2.3.2",
     "ip": "^1.1.5",
     "lodash": "^4.17.21",
     "node-cache": "^5.1.2"
@@ -13,8 +13,8 @@
   "devDependencies": {
     "ac-semantic-release": "^0.2.5",
     "chai": "^4.3.4",
-    "eslint": "^7.22.0",
-    "ioredis": "^4.24.2",
+    "eslint": "^7.25.0",
+    "ioredis": "^4.27.1",
     "mocha": "^8.3.2"
   },
   "scripts": {
