@@ -1,21 +1,21 @@
 {
   "name": "ac-geoip",
-  "author": "Mark Poepping (https://www.mmpro.de)",
+  "author": "Mark Poepping (https://www.admiralcloud.com)",
   "license": "MIT",
-  "repository": "mmpro/ac-geoip",
+  "repository": "admiralcloud/ac-geoip",
   "version": "1.4.1",
   "dependencies": {
-    "@maxmind/geoip2-node": "^2.3.2",
+    "@maxmind/geoip2-node": "^3.2.0",
     "ip": "^1.1.5",
     "lodash": "^4.17.21",
     "node-cache": "^5.1.2"
   },
   "devDependencies": {
-    "ac-semantic-release": "^0.2.5",
+    "ac-semantic-release": "^0.2.6",
     "chai": "^4.3.4",
-    "eslint": "^7.25.0",
-    "ioredis": "^4.27.1",
-    "mocha": "^8.3.2"
+    "eslint": "^7.32.0",
+    "ioredis": "^4.27.10",
+    "mocha": "^9.1.2"
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --bail --exit --slow 1000 ./test/test.js || :"
