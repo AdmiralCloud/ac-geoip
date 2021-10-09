@@ -1,3 +1,12 @@
+<a name="1.4.2"></a>
+
+## [1.4.2](https://github.com/admiralcloud/ac-geoip/compare/v1.4.1..v1.4.2) (2021-10-09 10:25:40)
+
+
+### Bug Fix
+
+* **App:** Package updates | MP | [08dd237ecc7274cfb083f3f6279036fa94d17398](https://github.com/admiralcloud/ac-geoip/commit/08dd237ecc7274cfb083f3f6279036fa94d17398)    
+Package updates
 <a name="1.4.1"></a>
 
 ## [1.4.1](https://github.com/mmpro/ac-geoip/compare/v1.4.0..v1.4.1) (2021-05-02 09:42:55)
