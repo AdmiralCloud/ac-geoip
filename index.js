@@ -2,14 +2,14 @@ const _ = require('lodash')
 const ipPackage = require('ip')
 const fs = require('fs')
 
-const WebServiceClient = require('@maxmind/geoip2-node').WebServiceClient;
-const Reader = require('@maxmind/geoip2-node').Reader;
+const WebServiceClient = require('@maxmind/geoip2-node').WebServiceClient
+const Reader = require('@maxmind/geoip2-node').Reader
 
-const NodeCache = require( "node-cache" );
-const geoCache = new NodeCache( { stdTTL: 7*86400, checkperiod: 3600 } );
+const NodeCache = require("node-cache")
+const geoCache = new NodeCache({ stdTTL: 7 * 86400, checkperiod: 3600 })
 
 const acgeoip = () => {
-  
+
   let geoip = {
     userId: 'userId',
     licenseKey: 'licenseKey',
@@ -47,9 +47,7 @@ const acgeoip = () => {
     }
   }
 
-
-
-  const lookupLocal = async(params, cb) => {
+  const lookupLocal = async (params, cb) => {
     const functionName = 'ac-geoip | lookupLocal'
     if (!_.get(geoip, 'geolite.enabled')) {
       let message = 'acgeoip_geolite_notEnabled'
@@ -89,7 +87,7 @@ const acgeoip = () => {
         try {
           if (_.get(geoip, 'geolite.enabled')) {
             geoipResponse = await new Promise((resolve, reject) => {
-                Reader.open(_.get(geoip, 'geolite.path')).then(reader => {
+              Reader.open(_.get(geoip, 'geolite.path')).then(reader => {
                 const response = reader.city(ip)
                 resolve(response)
               }).catch(reject)
@@ -101,17 +99,17 @@ const acgeoip = () => {
             console.log('AC-GEOIP | From Geolite | %j', geoipResponse)
           }
         }
-        catch(e) {
+        catch (e) {
           console.error('AC-GEOIP | From Geolite | Failed | %j', e)
         }
       }
       if (geoipResponse) {
         _.set(geoipResponse, 'origin', 'db')
         if (geoip.redis) {
-          await storeRedis({ ip, geoipResponse })  
+          await storeRedis({ ip, geoipResponse })
         }
         else {
-          storeInMemory({ ip, geoipResponse })          
+          storeInMemory({ ip, geoipResponse })
         }
         if (debugPerformance) console.log('%s | storeInCache %d', functionName, performanceHelper(start, process.hrtime()))
       }
@@ -134,7 +132,7 @@ const acgeoip = () => {
     return response
   }
 
-  const lookup = async(params, cb) => {
+  const lookup = async (params, cb) => {
     const functionName = 'ac-geoip | lookup'
     if (!_.get(geoip, 'licenseKey') || _.get(geoip, 'licenseKey') === 'licenseKey') {
       let message = 'acgeoip_licenseKey_missing'
@@ -151,7 +149,7 @@ const acgeoip = () => {
     const debug = _.get(params, 'debug')
     const debugPerformance = _.get(params, 'debugPerforance')
     const start = process.hrtime()
-    
+
     let response = {
       ip
     }
@@ -170,8 +168,8 @@ const acgeoip = () => {
       try {
         const client = new WebServiceClient(geoip.userId, geoip.licenseKey)
         geoipResponse = await new Promise((resolve, reject) => {
-            client.city(ip).then(result => {
-              return resolve(result)
+          client.city(ip).then(result => {
+            return resolve(result)
           }).catch(reject)
         })
         if (debugPerformance) console.log('%s | readFromWebservice %d', functionName, performanceHelper(start, process.hrtime()))
@@ -183,17 +181,17 @@ const acgeoip = () => {
           console.log('AC-GEOIP | From Maxmind | %j', geoipResponse)
         }
       }
-      catch(e) {
+      catch (e) {
         console.error('AC-GEOIP | From Maxmind | Failed | %j', e)
       }
     }
 
     if (geoipResponse) {
       if (geoip.redis) {
-        await storeRedis({ ip, geoipResponse })  
+        await storeRedis({ ip, geoipResponse })
       }
       else {
-        storeInMemory({ ip, geoipResponse })          
+        storeInMemory({ ip, geoipResponse })
       }
       if (debugPerformance) console.log('%s | storeInCache %d', functionName, performanceHelper(start, process.hrtime()))
     }
@@ -228,8 +226,7 @@ const acgeoip = () => {
     return geoCache.get(storageKey)
   }
 
-
-  const checkRedis = async(params, cb) => {
+  const checkRedis = async (params, cb) => {
     const refresh = _.get(params, 'refresh')
     if (!geoip.redis || refresh) {
       if (_.isFunction(cb)) return cb()
@@ -250,14 +247,14 @@ const acgeoip = () => {
         console.log('AC-GEOIP | From Cache | %j', geoipResponse)
       }
     }
-    catch(e) {
+    catch (e) {
       console.log(e)
       console.error('AC-GEOIP | From Cache | Failed | %j', e)
     }
     return geoipResponse
   }
 
-  const storeRedis = async(params) => {
+  const storeRedis = async (params) => {
     const refresh = _.get(params, 'refresh')
     if (!geoip.redis || refresh) {
       return
@@ -273,9 +270,8 @@ const acgeoip = () => {
     const accuracy = _.get(options, 'accuracy', 1e6)
     const s = t2[0] - t1[0]
     const mms = t2[1] - t1[1]
-    return (s*1e9 + mms)/accuracy
+    return (s * 1e9 + mms) / accuracy
   }
-
 
   return {
     init,
