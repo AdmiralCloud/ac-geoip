@@ -47,18 +47,15 @@ const acgeoip = () => {
     }
   }
 
-  const lookupLocal = async (params, cb) => {
+  const lookupLocal = async (params) => {
     const functionName = 'ac-geoip | lookupLocal'
     if (!_.get(geoip, 'geolite.enabled')) {
-      let message = 'acgeoip_geolite_notEnabled'
-      if (_.isFunction(cb)) return cb({ message })
+      const message = 'acgeoip_geolite_notEnabled'
       throw Error(message)
     }
+    
     const ip = _.get(params, 'ip')
-    if (ipPackage.isPrivate(ip)) {
-      if (_.isFunction(cb)) return cb()
-      return
-    }
+    if (ipPackage.isPrivate(ip)) return
 
     const mapping = _.get(params, 'mapping', geoip.mapping)
     const debug = _.get(params, 'debug')
@@ -71,11 +68,17 @@ const acgeoip = () => {
     let geoipResponse
 
     if (geoip.redis) {
-      geoipResponse = await checkRedis(params)
+      try {
+        geoipResponse = await checkRedis(params)
+      }
+      catch (err) {
+        console.error('AC-GEOIP | From Geolite | Failed | %j', err)
+      }
     }
     else {
       geoipResponse = getFromMemory({ ip })
     }
+
     if (debugPerformance) console.log('%s | getFromCache %d', functionName, performanceHelper(start, process.hrtime()))
 
     if (!geoipResponse) {
@@ -86,13 +89,10 @@ const acgeoip = () => {
       else {
         try {
           if (_.get(geoip, 'geolite.enabled')) {
-            geoipResponse = await new Promise((resolve, reject) => {
-              Reader.open(_.get(geoip, 'geolite.path')).then(reader => {
-                const response = reader.city(ip)
-                resolve(response)
-              }).catch(reject)
-            })
+            const response = await Reader.open(_.get(geoip, 'geolite.path'))
+            if (response) geoipResponse = response.city(ip)
           }
+
           if (debugPerformance) console.log('%s | readFromDB %d', functionName, performanceHelper(start, process.hrtime()))
 
           if (debug) {
@@ -103,6 +103,7 @@ const acgeoip = () => {
           console.error('AC-GEOIP | From Geolite | Failed | %j', e)
         }
       }
+
       if (geoipResponse) {
         _.set(geoipResponse, 'origin', 'db')
         if (geoip.redis) {
@@ -111,6 +112,7 @@ const acgeoip = () => {
         else {
           storeInMemory({ ip, geoipResponse })
         }
+        
         if (debugPerformance) console.log('%s | storeInCache %d', functionName, performanceHelper(start, process.hrtime()))
       }
     }
@@ -124,24 +126,23 @@ const acgeoip = () => {
     else {
       response = geoipResponse
     }
+
     _.set(response, 'origin', _.get(geoipResponse, 'origin'))
     if (_.get(geoipResponse, 'fromCache')) _.set(response, 'fromCache', true)
-
+    
     if (debugPerformance) console.log('%s | Finished %d', functionName, performanceHelper(start, process.hrtime()))
-    if (_.isFunction(cb)) return cb(null, response)
+    
     return response
   }
 
-  const lookup = async (params, cb) => {
+  const lookup = async (params) => {
     const functionName = 'ac-geoip | lookup'
     if (!_.get(geoip, 'licenseKey') || _.get(geoip, 'licenseKey') === 'licenseKey') {
-      let message = 'acgeoip_licenseKey_missing'
-      if (_.isFunction(cb)) return cb({ message })
+      const message = 'acgeoip_licenseKey_missing'
       throw Error(message)
     }
     const ip = _.get(params, 'ip')
     if (ipPackage.isPrivate(ip)) {
-      if (_.isFunction(cb)) return cb()
       return
     }
 
@@ -167,11 +168,7 @@ const acgeoip = () => {
     if (!_.get(geoipResponse, 'country')) {
       try {
         const client = new WebServiceClient(geoip.userId, geoip.licenseKey)
-        geoipResponse = await new Promise((resolve, reject) => {
-          client.city(ip).then(result => {
-            return resolve(result)
-          }).catch(reject)
-        })
+        geoipResponse = await client.city(ip)
         if (debugPerformance) console.log('%s | readFromWebservice %d', functionName, performanceHelper(start, process.hrtime()))
         if (geoipResponse) {
           _.set(geoipResponse, 'origin', 'webservice')
@@ -209,7 +206,6 @@ const acgeoip = () => {
     _.set(response, 'origin', _.get(geoipResponse, 'origin'))
     if (_.get(geoipResponse, 'fromCache')) _.set(response, 'fromCache', true)
 
-    if (_.isFunction(cb)) return cb(null, response)
     return response
   }
 
@@ -226,12 +222,10 @@ const acgeoip = () => {
     return geoCache.get(storageKey)
   }
 
-  const checkRedis = async (params, cb) => {
+  const checkRedis = async (params) => {
     const refresh = _.get(params, 'refresh')
-    if (!geoip.redis || refresh) {
-      if (_.isFunction(cb)) return cb()
-      return
-    }
+    if (!geoip.redis || refresh) return
+
     const ip = _.get(params, 'ip')
     const redisKey = _.get(geoip, 'environment') + ':geoip:' + ip
     const debug = _.get(params, 'debug')
