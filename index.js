@@ -89,8 +89,12 @@ const acgeoip = () => {
       else {
         try {
           if (_.get(geoip, 'geolite.enabled')) {
-            const response = await Reader.open(_.get(geoip, 'geolite.path'))
-            if (response) geoipResponse = response.city(ip)
+            let geoipReader = _.get(geoip, 'geolite.reader')
+            if (!geoipReader) {
+              geoipReader = await Reader.open(_.get(geoip, 'geolite.path'))
+              _.set(geoip, 'geolite.reader', geoipReader)
+            }
+            if (geoipReader) geoipResponse = geoipReader.city(ip)
           }
 
           if (debugPerformance) console.log('%s | readFromDB %d', functionName, performanceHelper(start, process.hrtime()))
