@@ -45,6 +45,11 @@ const acgeoip = () => {
       const dbBuffer = fs.readFileSync(_.get(geoip, 'geolite.path'))
       geoip.reader = Reader.openBuffer(dbBuffer)
     }
+    else {
+      Reader.open(_.get(geoip, 'geolite.path')).then(geoipReader => {
+        geoip.geolite.reader = geoipReader
+      })
+    }
   }
 
   const lookupLocal = async (params) => {
@@ -53,7 +58,7 @@ const acgeoip = () => {
       const message = 'acgeoip_geolite_notEnabled'
       throw Error(message)
     }
-    
+
     const ip = _.get(params, 'ip')
     if (ipPackage.isPrivate(ip)) return
 
@@ -116,7 +121,7 @@ const acgeoip = () => {
         else {
           storeInMemory({ ip, geoipResponse })
         }
-        
+
         if (debugPerformance) console.log('%s | storeInCache %d', functionName, performanceHelper(start, process.hrtime()))
       }
     }
@@ -133,9 +138,9 @@ const acgeoip = () => {
 
     _.set(response, 'origin', _.get(geoipResponse, 'origin'))
     if (_.get(geoipResponse, 'fromCache')) _.set(response, 'fromCache', true)
-    
+
     if (debugPerformance) console.log('%s | Finished %d', functionName, performanceHelper(start, process.hrtime()))
-    
+
     return response
   }
 
