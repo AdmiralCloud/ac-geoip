@@ -1,3 +1,29 @@
+<a name="2.0.0"></a>
+ 
+# [2.0.0](https://github.com/admiralcloud/ac-geoip/compare/v1.4.2..v2.0.0) (2022-01-29 11:56:17)
+
+
+### Bug Fix
+
+* **App:** Open geolite DB during initialisation | VD | [37b6981913f08798c1b764021d528497f8cc238f](https://github.com/admiralcloud/ac-geoip/commit/37b6981913f08798c1b764021d528497f8cc238f)    
+Open geolite DB during initialisation  
+Related issues: [undefined/undefined#AC-2500](undefined/browse/AC-2500)
+* **App:** Cache geoip2 Reader object | VD | [54a67bb2d186ccf10ec72e8b370ce9a51c2ab89c](https://github.com/admiralcloud/ac-geoip/commit/54a67bb2d186ccf10ec72e8b370ce9a51c2ab89c)    
+Store object to re-use instead of opening DB file each time it's needed.  
+Related issues: [undefined/undefined#AC-2500](undefined/browse/AC-2500)
+* **App:** Remove callbacks from async functions | VD | [6c4a6ecd0ce8f8350eb206b41be0d90ddaf09ee5](https://github.com/admiralcloud/ac-geoip/commit/6c4a6ecd0ce8f8350eb206b41be0d90ddaf09ee5)    
+Mixing async and callback functions makes code read hard, misunderstand the results and make function behave unpredictably.  
+Related issues: [undefined/undefined#AC-2500](undefined/browse/AC-2500)
+### Style
+
+* **App:** Get rid of semicollons, code re-aligning | VD | [e27005f2001a0da06d12fe272a3e007937f1604b](https://github.com/admiralcloud/ac-geoip/commit/e27005f2001a0da06d12fe272a3e007937f1604b)    
+Get rid of semicollons, code re-aligning
+### Chores
+
+* **App:** Updated packages | MP | [49f68ab1575163f6b9e9a845a23cd779195d9a41](https://github.com/admiralcloud/ac-geoip/commit/49f68ab1575163f6b9e9a845a23cd779195d9a41)    
+Updated packages
+## BREAKING CHANGES
+* **App:** * lookupLocal, lookup functions fully async and doesn't have callback parameters
 <a name="1.4.2"></a>
 
 ## [1.4.2](https://github.com/admiralcloud/ac-geoip/compare/v1.4.1..v1.4.2) (2021-10-09 10:25:40)
