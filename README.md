@@ -28,7 +28,7 @@ async() {
 const acgeoip = require('./index')
 
 let geoip = {
-  geolite: {
+  geolite: { 
     enabled: true,
     path: '/path/to/GeoLite2-City.mmdb'
   }
