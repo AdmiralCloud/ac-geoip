@@ -1,3 +1,15 @@
+<a name="3.0.0"></a>
+ 
+# [3.0.0](https://github.com/admiralcloud/ac-geoip/compare/v2.0.0..v3.0.0) (2022-12-18 08:36:22)
+
+
+### Bug Fix
+
+* **App:** Package updates | MP | [e3278aa2ee04c529eebdee3c1f37ad1f8fd19425](https://github.com/admiralcloud/ac-geoip/commit/e3278aa2ee04c529eebdee3c1f37ad1f8fd19425)    
+Package updates - ac-geoip now requires Node 16+  
+Related issues: [/issues#undefined](https://github.com//issues/undefined)
+## BREAKING CHANGES
+* **App:** Node > 16 is required
 <a name="2.0.0"></a>
  
 # [2.0.0](https://github.com/admiralcloud/ac-geoip/compare/v1.4.2..v2.0.0) (2022-01-29 11:56:17)
