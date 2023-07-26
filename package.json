@@ -3,18 +3,18 @@
   "author": "Mark Poepping (https://www.admiralcloud.com)",
   "license": "MIT",
   "repository": "admiralcloud/ac-geoip",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "dependencies": {
-    "@maxmind/geoip2-node": "^3.5.0",
+    "@maxmind/geoip2-node": "^4.1.0",
     "ip": "^1.1.8",
     "lodash": "^4.17.21",
     "node-cache": "^5.1.2"
   },
   "devDependencies": {
-    "ac-semantic-release": "^0.3.4",
+    "ac-semantic-release": "^0.4.2",
     "chai": "^4.3.7",
-    "eslint": "^8.30.0",
-    "ioredis": "^5.2.4",
+    "eslint": "^8.45.0",
+    "ioredis": "^5.3.2",
     "mocha": "^10.2.0"
   },
   "scripts": {
