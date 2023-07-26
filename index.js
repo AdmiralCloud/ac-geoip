@@ -6,7 +6,6 @@ const WebServiceClient = require('@maxmind/geoip2-node').WebServiceClient
 const Reader = require('@maxmind/geoip2-node').Reader
 
 const NodeCache = require("node-cache")
-const geoCache = new NodeCache({ stdTTL: 7 * 86400, checkperiod: 3600 })
 
 const acgeoip = () => {
 
@@ -50,6 +49,11 @@ const acgeoip = () => {
         geoip.geolite.reader = geoipReader
       })
     }
+
+    if (!_.has(params, 'redis')) {
+      geoip.geoCache = new NodeCache({ stdTTL: _.get(geoip, 'cacheTime'), checkperiod: 3600 })
+    }
+
   }
 
   const lookupLocal = async (params) => {
@@ -222,13 +226,13 @@ const acgeoip = () => {
     const geoipResponse = _.get(params, 'geoipResponse')
     const ip = _.get(params, 'ip')
     const storageKey = _.get(geoip, 'environment') + ':geoip:' + ip
-    geoCache.set(storageKey, geoipResponse)
+    geoip.geoCache.set(storageKey, geoipResponse)
   }
 
   const getFromMemory = (params) => {
     const ip = _.get(params, 'ip')
     const storageKey = _.get(geoip, 'environment') + ':geoip:' + ip
-    return geoCache.get(storageKey)
+    return geoip.geoCache.get(storageKey)
   }
 
   const checkRedis = async (params) => {
