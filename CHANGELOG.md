@@ -1,3 +1,28 @@
+<a name="3.0.1"></a>
+
+## [3.0.1](https://github.com/admiralcloud/ac-geoip/compare/v3.0.0..v3.0.1) (2023-07-26 06:14:56)
+
+
+### Bug Fix
+
+* **App:** Make cacheTime for NodeCache configurable | MP | [89a63cbf3ae6e1bbcc277bd1cd45348c314c9080](https://github.com/admiralcloud/ac-geoip/commit/89a63cbf3ae6e1bbcc277bd1cd45348c314c9080)    
+Make cacheTime for NodeCache configurable. It still defaults to 7 days.  
+Related issues: [/issues#undefined](https://github.com//issues/undefined)
+### Documentation
+
+* **App:** Added status badge from Github aciton | MP | [1b71085160da67310dc568e981625a3ca5a2efa0](https://github.com/admiralcloud/ac-geoip/commit/1b71085160da67310dc568e981625a3ca5a2efa0)    
+Added status badge from Github action  
+Related issues: [undefined/undefined#master](undefined/browse/master)
+### Chores
+
+* **App:** Updated packages | MP | [49d773010e3cb55ccdf0c6de6f9a9e8af17974fa](https://github.com/admiralcloud/ac-geoip/commit/49d773010e3cb55ccdf0c6de6f9a9e8af17974fa)    
+Updated packages  
+Related issues: [/issues#undefined](https://github.com//issues/undefined)
+### Chores
+
+* **App:** Added Github action for automated testing | MP | [2302e4a9c71c67ba2caa2ce89fa03e1a1a0c1459](https://github.com/admiralcloud/ac-geoip/commit/2302e4a9c71c67ba2caa2ce89fa03e1a1a0c1459)    
+Added Github action for automated testing  
+Related issues: [undefined/undefined#master](undefined/browse/master)
 <a name="3.0.0"></a>
  
 # [3.0.0](https://github.com/admiralcloud/ac-geoip/compare/v2.0.0..v3.0.0) (2022-12-18 08:36:22)
