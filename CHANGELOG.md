@@ -1,3 +1,13 @@
+<a name="3.0.2"></a>
+
+## [3.0.2](https://github.com/admiralcloud/ac-geoip/compare/v3.0.1..v3.0.2) (2024-02-26 07:45:31)
+
+
+### Bug Fix
+
+* **App:** Package updates | MP | [e6ab5710fa897109578b6f640fabde9773b3cc56](https://github.com/admiralcloud/ac-geoip/commit/e6ab5710fa897109578b6f640fabde9773b3cc56)    
+Package updates  
+Related issues: [undefined/undefined#master](undefined/browse/master)
 <a name="3.0.1"></a>
 
 ## [3.0.1](https://github.com/admiralcloud/ac-geoip/compare/v3.0.0..v3.0.1) (2023-07-26 06:14:56)
