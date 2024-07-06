@@ -9,7 +9,7 @@ const NodeCache = require("node-cache")
 
 const acgeoip = () => {
 
-  let geoip = {
+  const geoip = {
     userId: 'userId',
     licenseKey: 'licenseKey',
     environment: 'development',
@@ -64,7 +64,7 @@ const acgeoip = () => {
     }
 
     const ip = _.get(params, 'ip')
-    if (ipPackage.isPrivateIP(ip)) return
+    if (ipPackage.isSpecialIP(ip)) return
 
     const mapping = _.get(params, 'mapping', geoip.mapping)
     const debug = _.get(params, 'debug')
@@ -155,7 +155,7 @@ const acgeoip = () => {
       throw Error(message)
     }
     const ip = _.get(params, 'ip')
-    if (ipPackage.isPrivateIP(ip)) {
+    if (ipPackage.isSpecialIP(ip)) {
       return
     }
 

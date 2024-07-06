@@ -108,9 +108,9 @@ describe('Test Geolite2 local database', () => {
   it('Shoud be tested with async/await', async function() {
       this.timeout(5000)
       const result = await acgeoip.lookupLocal({ ip, debug: false, refresh: true })    
-      let fields = ['iso2', 'city', 'region']
+      const fields = ['iso2', 'city', 'region']
       _.forEach(fields, key => {
-        let val = _.get(expectedValue, key)
+        const val = _.get(expectedValue, key)
         expect(result).to.have.property(key, val)
       })
       expect(result).to.have.property('origin', 'db')
@@ -120,9 +120,9 @@ describe('Test Geolite2 local database', () => {
   it('Test again - should be from cache', async function() {
     this.timeout(5000)
     const result = await acgeoip.lookupLocal({ ip, debug: false })    
-    let fields = ['iso2', 'city', 'region']
+    const fields = ['iso2', 'city', 'region']
     _.forEach(fields, key => {
-      let val = _.get(expectedValue, key)
+      const val = _.get(expectedValue, key)
       expect(result).to.have.property(key, val)
     })
     expect(result).to.have.property('origin', 'db')

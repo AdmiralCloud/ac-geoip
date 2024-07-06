@@ -102,10 +102,10 @@ ac-custom-error@^1.0.0:
   resolved "https://registry.yarnpkg.com/ac-custom-error/-/ac-custom-error-1.0.0.tgz#d430e1695e6bf19a9d5757d97f8f6c8b816bd67e"
   integrity sha512-JxIlIkDHrSiu26eNbe8o4EP+W+dS0bKZUU9Hl7/DAvQVR+2G0r6Y+ZSmq8cM4smdge01Hfr1hTDsTvxn1EID/Q==
 
-ac-ip@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/ac-ip/-/ac-ip-4.0.0.tgz#8653e8b85d10fb6c6e3e133bd0d0629b469568c3"
-  integrity sha512-lr05V6riarH3Rgt1pfjs3owdxpu8Hp0CweN3sSG+5LwfYv/0XWd2jYOEy+vhpcnrkyDhEOfVx8HKp3WDli77jA==
+ac-ip@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/ac-ip/-/ac-ip-4.1.0.tgz#35d63437d9175ae4bcb56c7670979972984838ad"
+  integrity sha512-Hh0xqJh4OsGaASbJYnkAK+LXaoP+xf1OIKE1J9nV/f/PC7AlT1IiluxuanPn/WDRjgRr6UsQvdBpn9eqNyA4hw==
   dependencies:
     ac-custom-error "^1.0.0"
     ip-address "^9.0.5"
