@@ -6,7 +6,7 @@
   "version": "3.0.4",
   "dependencies": {
     "@maxmind/geoip2-node": "^5.0.0",
-    "ac-ip": "^4.1.0",
+    "ac-ip": "^4.1.1",
     "lodash": "^4.17.21",
     "node-cache": "^5.1.2"
   },
