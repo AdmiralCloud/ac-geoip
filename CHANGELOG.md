@@ -1,3 +1,13 @@
+<a name="3.0.4"></a>
+
+## [3.0.4](https://github.com/admiralcloud/ac-geoip/compare/v3.0.3..v3.0.4) (2024-07-06 18:54:03)
+
+
+### Bug Fix
+
+* **App:** Replaced isPrivateIP with isSpecialIP | MP | [9a93369cef3549c1b5ac48636f4669fac0332374](https://github.com/admiralcloud/ac-geoip/commit/9a93369cef3549c1b5ac48636f4669fac0332374)    
+Replaced isPrivateIP with isSpecialIP  
+Related issues: [undefined/undefined#master](undefined/browse/master)
 <a name="3.0.3"></a>
 
 ## [3.0.3](https://github.com/admiralcloud/ac-geoip/compare/v3.0.2..v3.0.3) (2024-07-06 12:44:21)
