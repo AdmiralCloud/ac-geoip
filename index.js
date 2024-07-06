@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const ipPackage = require('ip')
+const ipPackage = require('ac-ip')
 const fs = require('fs')
 
 const WebServiceClient = require('@maxmind/geoip2-node').WebServiceClient
@@ -64,7 +64,7 @@ const acgeoip = () => {
     }
 
     const ip = _.get(params, 'ip')
-    if (ipPackage.isPrivate(ip)) return
+    if (ipPackage.isPrivateIP(ip)) return
 
     const mapping = _.get(params, 'mapping', geoip.mapping)
     const debug = _.get(params, 'debug')
@@ -155,7 +155,7 @@ const acgeoip = () => {
       throw Error(message)
     }
     const ip = _.get(params, 'ip')
-    if (ipPackage.isPrivate(ip)) {
+    if (ipPackage.isPrivateIP(ip)) {
       return
     }
 
