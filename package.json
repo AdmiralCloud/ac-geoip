@@ -5,17 +5,17 @@
   "repository": "admiralcloud/ac-geoip",
   "version": "3.0.8",
   "dependencies": {
-    "@maxmind/geoip2-node": "^6.1.0",
-    "ac-ip": "^4.1.4",
-    "lodash": "^4.17.21",
+    "@maxmind/geoip2-node": "^6.3.4",
+    "ac-ip": "^4.1.9",
+    "lodash": "^4.17.23",
     "node-cache": "^5.1.2"
   },
   "devDependencies": {
-    "ac-semantic-release": "^0.4.7",
+    "ac-semantic-release": "^0.4.10",
     "chai": "^4.5.0",
-    "eslint": "^9.34.0",
-    "ioredis": "^5.7.0",
-    "mocha": "^11.7.1"
+    "eslint": "^9.39.2",
+    "ioredis": "^5.9.2",
+    "mocha": "^11.7.5"
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --bail --exit --slow 1000 ./test/test.js || :"
@@ -24,7 +24,8 @@
     "node": ">=18.0"
   },
   "resolutions": {
-    "mocha/chokidar/braces": "^3.0.3"
+    "mocha/chokidar/braces": "^3.0.3",
+    "mocha/diff": "^8.0.3"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
