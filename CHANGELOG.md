@@ -1,3 +1,12 @@
+
+## [4.0.1](https://github.com/admiralcloud/ac-geoip/compare/v4.0.0..v4.0.1) (2026-02-28 12:11:48)
+
+
+### Bug Fix
+
+* **Misc:** Updated README. Node 20+ required | MP | [54a10b16a4d4e784fb17f14f0cd7fd1fad1bb4da](https://github.com/admiralcloud/ac-geoip/commit/54a10b16a4d4e784fb17f14f0cd7fd1fad1bb4da)    
+Updated README. Node 20+ required  
+Related issues:
  
 # [4.0.0](https://github.com/admiralcloud/ac-geoip/compare/v3.0.9..v4.0.0) (2026-02-28 12:08:49)
 
