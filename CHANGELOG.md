@@ -1,3 +1,19 @@
+ 
+# [4.0.0](https://github.com/admiralcloud/ac-geoip/compare/v3.0.9..v4.0.0) (2026-02-28 12:08:49)
+
+
+### Bug Fix
+
+* **App:** Package updates | MP | [8854d0d8c2d8138818e76cb25d332052a13bd784](https://github.com/admiralcloud/ac-geoip/commit/8854d0d8c2d8138818e76cb25d332052a13bd784)    
+Package updates  
+Related issues:
+### Chores
+
+* **Misc:** Add permission to workflow | MP | [821198f03f73ebc64f7b5b21a10554474e6891b0](https://github.com/admiralcloud/ac-geoip/commit/821198f03f73ebc64f7b5b21a10554474e6891b0)    
+Add permission to workflow  
+Related issues:
+## BREAKING CHANGES
+* **App:** Version 20+ required
 
 ## [3.0.9](https://github.com/admiralcloud/ac-geoip/compare/v3.0.8..v3.0.9) (2026-02-03 08:27:18)
 
