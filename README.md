@@ -7,6 +7,9 @@ You can also use the Geolite2 database from Maxmind: https://dev.maxmind.com/geo
 
 [![Node.js CI](https://github.com/AdmiralCloud/ac-geoip/actions/workflows/node.js.yml/badge.svg)](https://github.com/AdmiralCloud/ac-geoip/actions/workflows/node.js.yml)
 
+## Breaking Change Version 4.x
+Version 4.x requires Node 20 or higher.
+
 ## Usage
 
 ### Using Webservice
