@@ -6,15 +6,15 @@
   "version": "4.0.1",
   "dependencies": {
     "@maxmind/geoip2-node": "^6.3.4",
-    "ac-ip": "^4.1.11",
+    "ac-ip": "^4.1.12",
     "lodash": "^4.17.23",
     "node-cache": "^5.1.2"
   },
   "devDependencies": {
     "ac-semantic-release": "^0.4.10",
     "chai": "^4.5.0",
-    "eslint": "^9.39.3",
-    "ioredis": "^5.10.0",
+    "eslint": "^9.39.4",
+    "ioredis": "^5.10.1",
     "mocha": "^11.7.5"
   },
   "scripts": {
