@@ -16,12 +16,14 @@ yarn-error.log
 **/tmp/**
 debug.js
 **/geolite2/**
+.claude**
 
 ########################
 # docs / tests
 ########################
 doc
 report.xml
+coverage*
 
 ########################
 # local config
