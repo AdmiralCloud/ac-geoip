@@ -1,3 +1,17 @@
+## [4.0.8](https://github.com/admiralcloud/ac-geoip/compare/v4.0.7..v4.0.8) (2026-06-22 15:08:34)
+
+
+### Bug Fix
+
+
+* **App:** Package updates | MP | [b3e456c626c155f3a9072657e4cc35d92f36e48f](https://github.com/admiralcloud/ac-geoip/commit/b3e456c626c155f3a9072657e4cc35d92f36e48f)    
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+### Tests
+
+
+* **App:** Improved test coverage | MP | [e133a2df6490f4e8260003d1802b441acf792874](https://github.com/admiralcloud/ac-geoip/commit/e133a2df6490f4e8260003d1802b441acf792874)    
+Improved test coverage  
+Related issues:
 ## [4.0.7](https://github.com/admiralcloud/ac-geoip/compare/v4.0.6..v4.0.7) (2026-05-24 05:43:36)
 
 
