@@ -68,7 +68,7 @@ const acgeoip = () => {
 
     const mapping = _.get(params, 'mapping', geoip.mapping)
     const debug = _.get(params, 'debug')
-    const debugPerformance = _.get(params, 'debugPerforance')
+    const debugPerformance = _.get(params, 'debugPerformance')
     const start = process.hrtime()
 
     let response = {
@@ -161,7 +161,7 @@ const acgeoip = () => {
 
     const mapping = _.get(params, 'mapping', geoip.mapping)
     const debug = _.get(params, 'debug')
-    const debugPerformance = _.get(params, 'debugPerforance')
+    const debugPerformance = _.get(params, 'debugPerformance')
     const start = process.hrtime()
 
     let response = {
