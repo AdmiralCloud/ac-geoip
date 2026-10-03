@@ -19,7 +19,7 @@
     "mocha": "^11.8.0"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha --bail --exit --slow 1000 ./test/test.js || :"
+    "test": "./node_modules/.bin/mocha --bail --exit --slow 1000 ./test/test.js"
   },
   "engines": {
     "node": ">=20"
