@@ -89,6 +89,12 @@ const load = () => {
   return require(indexPath)
 }
 
+const addressNotFound = () => {
+  const e = Error('The address ' + ip + ' is not in the database.')
+  e.name = 'AddressNotFoundError'
+  return e
+}
+
 const tick = () => new Promise(resolve => setImmediate(resolve))
 
 const catchError = async (promise) => {
@@ -315,13 +321,53 @@ describe('ac-geoip (unit)', () => {
       expect(logs.error.map(args => args[0])).to.include('AC-GEOIP | From Geolite | Failed | %j')
     })
 
-    it('returns no data if the IP is not in the database', async () => {
+    it('returns no data without error log if the IP is not in the database', async () => {
       geoip.init({ geolite: { enabled: true, path: geolitePath } })
       await tick()
-      fake.readerCity = () => { throw Error('AddressNotFoundError') }
+      fake.readerCity = () => { throw addressNotFound() }
+      const result = await geoip.lookupLocal({ ip })
+      expect(result).to.have.property('ip', ip)
+      expect(result.origin).to.be.undefined
+      expect(logs.error).to.have.length(0)
+      expect(logs.warn).to.have.length(0)
+    })
+
+    it('logs address not found as warning in debug mode', async () => {
+      geoip.init({ geolite: { enabled: true, path: geolitePath } })
+      await tick()
+      fake.readerCity = () => { throw addressNotFound() }
+      await geoip.lookupLocal({ ip, debug: true })
+      expect(logs.error).to.have.length(0)
+      expect(logs.warn.map(args => args[0])).to.include('AC-GEOIP | From Geolite | Address not found | %s')
+    })
+
+    it('still logs other reader errors as error', async () => {
+      geoip.init({ geolite: { enabled: true, path: geolitePath } })
+      await tick()
+      fake.readerCity = () => { throw Error('corrupt_database') }
       const result = await geoip.lookupLocal({ ip })
       expect(result.origin).to.be.undefined
-      expect(logs.error).to.have.length(1)
+      expect(logs.error.map(args => args[0])).to.include('AC-GEOIP | From Geolite | Failed | %j')
+    })
+
+    it('does not ask the database again for an IP that was not found', async () => {
+      geoip.init({ geolite: { enabled: true, path: geolitePath } })
+      await tick()
+      fake.readerCity = () => { throw addressNotFound() }
+      await geoip.lookupLocal({ ip })
+      const result = await geoip.lookupLocal({ ip })
+      expect(result).to.have.property('ip', ip)
+      expect(result.origin).to.be.undefined
+      expect(result).to.not.have.property('iso2')
+      expect(fake.readerCityCalls).to.have.length(1)
+    })
+
+    it('returns undefined with empty mapping if the IP was not found', async () => {
+      geoip.init({ geolite: { enabled: true, path: geolitePath } })
+      await tick()
+      fake.readerCity = () => { throw addressNotFound() }
+      expect(await geoip.lookupLocal({ ip, mapping: [] })).to.be.undefined
+      expect(await geoip.lookupLocal({ ip, mapping: [] })).to.be.undefined
     })
 
     describe('with useBuffer', () => {
@@ -351,6 +397,26 @@ describe('ac-geoip (unit)', () => {
         expect(fake.readerOpenCalls).to.have.length(0)
         expect(logs.warn.map(args => args[0])).to.include('%s | readFromBuffer %d')
       })
+
+      it('returns no data without error log if the IP is not in the database', async () => {
+        geoip.init({ geolite: { enabled: true, useBuffer: true, path: geolitePath } })
+        fake.readerCity = () => { throw addressNotFound() }
+        const result = await geoip.lookupLocal({ ip })
+        expect(result).to.have.property('ip', ip)
+        expect(result.origin).to.be.undefined
+        expect(logs.error).to.have.length(0)
+
+        await geoip.lookupLocal({ ip })
+        expect(fake.readerCityCalls).to.have.length(1)
+      })
+
+      it('logs other reader errors as error instead of throwing', async () => {
+        geoip.init({ geolite: { enabled: true, useBuffer: true, path: geolitePath } })
+        fake.readerCity = () => { throw Error('corrupt_database') }
+        const result = await geoip.lookupLocal({ ip })
+        expect(result.origin).to.be.undefined
+        expect(logs.error).to.have.length(1)
+      })
     })
 
     describe('with redis', () => {
@@ -369,6 +435,20 @@ describe('ac-geoip (unit)', () => {
         expect(second).to.deep.include(expectedValue)
         expect(second).to.have.property('fromCache', true)
         expect(fake.readerCityCalls).to.have.length(1)
+      })
+
+      it('caches not found IPs in redis', async () => {
+        fake.readerCity = () => { throw addressNotFound() }
+        const first = await geoip.lookupLocal({ ip })
+        expect(first.origin).to.be.undefined
+        expect(redis.store).to.have.property('test:geoip:' + ip)
+
+        const second = await geoip.lookupLocal({ ip })
+        expect(second).to.have.property('ip', ip)
+        expect(second).to.not.have.property('iso2')
+        expect(second.origin).to.be.undefined
+        expect(fake.readerCityCalls).to.have.length(1)
+        expect(logs.error).to.have.length(0)
       })
 
       it('refresh skips the cache', async () => {
