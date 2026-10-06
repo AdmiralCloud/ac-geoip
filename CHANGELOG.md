@@ -1,3 +1,27 @@
+## [4.0.12](https://github.com/admiralcloud/ac-geoip/compare/v4.0.11..v4.0.12) (2026-10-06 17:36:34)
+
+
+### Bug Fix
+
+
+* **App:** Do not log AddressNotFoundError as error, improve code | MP | [94d7c81751c9a358f2f35ff0067a941df0be0601](https://github.com/admiralcloud/ac-geoip/commit/94d7c81751c9a358f2f35ff0067a941df0be0601)    
+Do not log AddressNotFoundError as error, improve code  
+Related issues:
+* **App:** Make ac-geoip tests self-contained, minor fixes, major package updates | MP | [475dcd3f8539cc6d4f28d94286797397449ad0dd](https://github.com/admiralcloud/ac-geoip/commit/475dcd3f8539cc6d4f28d94286797397449ad0dd)    
+See tickets for more details  
+Related issues:
+### Chores
+
+
+* **Misc:** Updated minimum version to 22 | MP | [383707e8e96b2fb50719f0355ebe45e26355ac6f](https://github.com/admiralcloud/ac-geoip/commit/383707e8e96b2fb50719f0355ebe45e26355ac6f)    
+Updated minimum version to Node 22  
+Related issues:
+* **Misc:** Always run CI tests, regardless of target branch | MP | [2819975a503694e1c07175fdc7929885b7d23af7](https://github.com/admiralcloud/ac-geoip/commit/2819975a503694e1c07175fdc7929885b7d23af7)    
+Always run CI tests, regardless of target branch  
+Related issues: (cherry picked from commit d3a4a94f73ed604ff5bf50f559300b049732e8cb)
+* **Misc:** Always run CI tests, regardless of target branch | MP | [d3a4a94f73ed604ff5bf50f559300b049732e8cb](https://github.com/admiralcloud/ac-geoip/commit/d3a4a94f73ed604ff5bf50f559300b049732e8cb)    
+Always run CI tests, regardless of target branch  
+Related issues:
 ## [4.0.11](https://github.com/admiralcloud/ac-geoip/compare/v4.0.10..v4.0.11) (2026-08-23 11:17:52)
 
 
