@@ -23,7 +23,7 @@
     "test:integration": "./node_modules/.bin/mocha --bail --exit --slow 1000 ./test/integration.js"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22.12"
   },
   "resolutions": {
     "mocha/chokidar/braces": "^3.0.3",
