@@ -42,7 +42,7 @@ const acgeoip = () => {
 
     if (_.get(params, 'geolite.enabled') && _.get(params, 'geolite.useBuffer')) {
       const dbBuffer = fs.readFileSync(_.get(geoip, 'geolite.path'))
-      geoip.reader = Reader.openBuffer(dbBuffer)
+      geoip.geolite.reader = Reader.openBuffer(dbBuffer)
     }
     else {
       Reader.open(_.get(geoip, 'geolite.path')).then(geoipReader => {
@@ -68,7 +68,7 @@ const acgeoip = () => {
 
     const mapping = _.get(params, 'mapping', geoip.mapping)
     const debug = _.get(params, 'debug')
-    const debugPerformance = _.get(params, 'debugPerforance')
+    const debugPerformance = _.get(params, 'debugPerformance')
     const start = process.hrtime()
 
     let response = {
@@ -90,40 +90,54 @@ const acgeoip = () => {
 
     if (debugPerformance) { console.warn('%s | getFromCache %d', functionName, performanceHelper(start, process.hrtime())) }
 
-    if (!geoipResponse) {
-      if (_.get(geoip, 'geolite.useBuffer') && geoip.reader) {
-        geoipResponse = geoip.reader.city(ip)
-        if (debugPerformance) { console.warn('%s | readFromBuffer %d', functionName, performanceHelper(start, process.hrtime())) }
-      }
-      else {
-        try {
-          if (_.get(geoip, 'geolite.enabled')) {
-            let geoipReader = _.get(geoip, 'geolite.reader')
-            if (!geoipReader) {
-              geoipReader = await Reader.open(_.get(geoip, 'geolite.path'))
-              _.set(geoip, 'geolite.reader', geoipReader)
-            }
-            if (geoipReader) { geoipResponse = geoipReader.city(ip) }
-          }
+    // IP was not found in the database before - do not ask again
+    let notFound = false
+    if (_.get(geoipResponse, 'notFound')) {
+      notFound = true
+      geoipResponse = undefined
+    }
 
-          if (debugPerformance) { console.warn('%s | readFromDB %d', functionName, performanceHelper(start, process.hrtime())) }
-
-          if (debug) {
-            console.warn('AC-GEOIP | From Geolite | %j', geoipResponse)
-          }
+    if (!geoipResponse && !notFound) {
+      try {
+        let geoipReader = _.get(geoip, 'geolite.reader')
+        if (_.get(geoip, 'geolite.useBuffer') && geoipReader) {
+          geoipResponse = geoipReader.city(ip)
+          if (debugPerformance) { console.warn('%s | readFromBuffer %d', functionName, performanceHelper(start, process.hrtime())) }
         }
-        catch (e) {
+        else {
+          if (!geoipReader) {
+            geoipReader = await Reader.open(_.get(geoip, 'geolite.path'))
+            _.set(geoip, 'geolite.reader', geoipReader)
+          }
+          geoipResponse = geoipReader.city(ip)
+          if (debugPerformance) { console.warn('%s | readFromDB %d', functionName, performanceHelper(start, process.hrtime())) }
+        }
+
+        if (debug) {
+          console.warn('AC-GEOIP | From Geolite | %j', geoipResponse)
+        }
+      }
+      catch (e) {
+        // an IP without entry in the database is a valid result, not an error
+        if (_.get(e, 'name') === 'AddressNotFoundError') {
+          notFound = true
+          if (debug) { console.warn('AC-GEOIP | From Geolite | Address not found | %s', ip) }
+        }
+        else {
           console.error('AC-GEOIP | From Geolite | Failed | %j', e)
         }
       }
 
       if (geoipResponse) {
         _.set(geoipResponse, 'origin', 'db')
+      }
+      const cacheValue = geoipResponse || (notFound ? { notFound: true } : undefined)
+      if (cacheValue) {
         if (geoip.redis) {
-          await storeRedis({ ip, geoipResponse })
+          await storeRedis({ ip, geoipResponse: cacheValue })
         }
         else {
-          storeInMemory({ ip, geoipResponse })
+          storeInMemory({ ip, geoipResponse: cacheValue })
         }
 
         if (debugPerformance) { console.warn('%s | storeInCache %d', functionName, performanceHelper(start, process.hrtime())) }
@@ -161,7 +175,7 @@ const acgeoip = () => {
 
     const mapping = _.get(params, 'mapping', geoip.mapping)
     const debug = _.get(params, 'debug')
-    const debugPerformance = _.get(params, 'debugPerforance')
+    const debugPerformance = _.get(params, 'debugPerformance')
     const start = process.hrtime()
 
     let response = {
